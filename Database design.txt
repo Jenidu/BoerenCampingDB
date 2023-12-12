@@ -1,0 +1,46 @@
+
+Customer info (customerID)
+-firstName
+-surName
+-email
+-phoneNumber
+-homeAddres
+-homeCountry
+-latestBookingDate (Privacy)
+-bookingID (list)
+
+
+Bookings (bookingID)
+-customerID
+-spotID
+-bookingDate
+-startDate
+-endDate
+-adults
+-children
+-transactionPrice
+-numberplate (0 == undefined)
+-notes (0 == undefined)
+
+
+Camping spot info (spotID)
+-spotName
+-type (small, medium, big)
+-pricePerDay
+
+
+Activities (activityID)
+-activityName
+-shortDiscription
+-longDiscription
+-totalAduls
+-totalChildren
+-startDate (+time)
+-endDate (+time)
+
+
+ActivitySignups
+-activityID
+-customerID
+-adults (per singup)
+-children (per singup)
