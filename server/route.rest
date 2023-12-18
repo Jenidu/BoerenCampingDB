@@ -23,6 +23,10 @@ DELETE http://localhost:3000/customers/
 PATCH  http://localhost:3000/customers/
 
 {
-    "name": "Bob",
-    "subscribedToChannel": "Channel name"
+    "firstName": "Pieter",
+    "surName": "Channel2",
+    "email": "hi@fefe.nl",
+    "phoneNumber": "49289035809",
+    "homeAddress": "hi2",
+    "homeCountry": "London"
 }
