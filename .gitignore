@@ -1,10 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
-.yarn/install-state.gz
+server/node_modules/
 
 # testing
 /coverage
@@ -28,24 +25,3 @@ yarn-error.log*
 
 # local env files
 .env*.local
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# Virtual environment
-venv/
-
-# python cache
-__pycache__/
-.pyc
-
-# dataset
-data/
-Archive/
-
-# trained network
-license_plate_detector.pth

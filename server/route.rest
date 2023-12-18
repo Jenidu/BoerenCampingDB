@@ -1,0 +1,28 @@
+GET http://localhost:3000/customers
+
+###
+
+POST http://localhost:3000/customers
+Content-Type: application/json
+
+{
+    "firstName": "Piet",
+    "surName": "Channel",
+    "email": "hi@fefe.nl",
+    "phoneNumber": "49289035809",
+    "homeAddress": "hi",
+    "homeCountry": "London"
+}
+
+###
+
+DELETE http://localhost:3000/customers/
+
+###
+
+PATCH  http://localhost:3000/customers/
+
+{
+    "name": "Bob",
+    "subscribedToChannel": "Channel name"
+}
