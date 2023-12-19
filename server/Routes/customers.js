@@ -1,70 +1,58 @@
-const express = require('express')
-const router = express.Router()
-const Customer = require('../customer')
+const express = require('express');
+const router = express.Router();
+const pool = require('../pool');
 
-router.get('/', async (req, res) => {  // Getting all
+router.get('/', async (req, res) => {
     try {
-        const customers = await Customer.find()
-        res.json(customers)
+      const conn = await pool.getConnection();
+      const rows = await conn.query('SELECT * FROM Customers');
+      conn.release();
+      res.json(rows);
     } catch (err) {
-        res.status(500).json({ message: err.message })
+      res.status(500).json({ error: err.message });
     }
-})
-
-router.get('/:id', getCustomer, async (req, res) => {  // Getting one
-    res.json(res.subscriber)
-})
-
-router.post('/', async (req, res) => {  // Creating one
-    const customer = new Customer({
-        name: req.body.name,
-        subscribedToChannel: req.body.subscribedToChannel
-    })
+  });
+  
+router.post('/', async (req, res) => {
+    const {
+      firstName,
+      surName,
+      email,
+      phoneNumber,
+      homeAddress,
+      homeCountry
+    } = req.body;
+  
+    if (!firstName || !surName || !email || !phoneNumber || !homeAddress || !homeCountry) {
+      return res.status(400).json({
+        error: 'All fields are required'
+      });
+    }
+  
     try {
-        const newCustomer = await customer.save()
-        res.status(201).json(newCustomer)
+      const conn = await pool.getConnection();
+      const result = await conn.query(
+        'INSERT INTO Customers (firstName, surName, email, phoneNumber, homeAddress, homeCountry) VALUES (?, ?, ?, ?, ?, ?)',
+        [firstName, surName, email, phoneNumber, homeAddress, homeCountry]
+      );
+      conn.release();
+  
+      const insertId = Number(result.insertId);
+  
+      res.json({
+        id: insertId,
+        firstName,
+        surName,
+        email,
+        phoneNumber,
+        homeAddress,
+        homeCountry
+      });
     } catch (err) {
-        res.status(400).json({ message: err.message })
+      res.status(500).json({
+        error: err.message
+      });
     }
-})
+  });
 
-router.patch('/:id', getCustomer, async (req, res) => {  // Updating one
-    if (req.body.name != NULL) {
-        res.subscriber.name = req.body.name
-    }
-    if (req.body.subscribedToChannel != NULL) {
-        res.subscriber.subscribedToChannel = req.body.name
-    }
-    try {
-        const updatedCustomer = await res.subscriber.save()
-        res.json(updatedCustomer)
-    } catch (err) {
-        res.status(400).json({ message: err.message })
-    }
- })
-
-router.delete('/:id', getCustomer, async (req, res) => {  // Deleting one
-    try {
-        await res.subscriber.remove()
-        res.json({ message: 'Deleted Subscriber' })
-    } catch (err) {
-        res.status(500).json({ message: err.message })
-    }
-})
-
-async function getCustomer(req, res, next){
-    
-    let customer
-    try {
-        customer = await Customer.FindById(req.params.id)
-        if (customer == NULL) {
-            return res.status(404).json({ message: 'Cannot find subscriber' }) 
-        }
-    } catch (err) {
-        return res.status(500).json({ message: err.message })
-    }
-    res.subscriber = customer
-    next()
-}
-
-module.exports = router
+module.exports = router;
