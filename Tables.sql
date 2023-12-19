@@ -67,6 +67,9 @@ CREATE TABLE ActivitySignups (
     children INT  /* Children per singup */
 );
 
+CREATE USER IF NOT EXISTS 'admin'@'localhost' IDENTIFIED BY 'admin123';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
 /*
 
 INSERT INTO ActivitiesInfo (activityName, discription, startTime, EndTime, maxPersons) VALUES ('', '', );

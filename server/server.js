@@ -1,36 +1,75 @@
-require('dotenv').config()
+const express = require('express');
+const mariaDB = require('mariadb');
+const bodyParser = require('body-parser');
 
-const express = require('express')
-const app = express()
-const cors = require('cors')
-const mariaDB = require('mariadb')
-
-app.use(cors())
+const app = express();
+const port = 3000;
+let pool
 
 try {
-  const pool = mariaDB.createPool({host: process.env.DB_HOST, user: process.env.DB_USER, connectionLimit: 5});
+  pool = mariaDB.createPool({host: 'localhost', user: 'admin', password: 'admin123', database: 'BookingSystem', connectionLimit: 5});
 }
 catch (err) {
   console.error("Error creating mariaDB pool:", err)
 }
 
+// Middleware to parse JSON requests
+app.use(bodyParser.json());
 
-async function asyncFunction() {
-  let conn
+// Define routes
+app.get('/customers', async (req, res) => {
   try {
-
-	conn = await pool.getConnection()
-	const rows = await conn.query("SELECT 1 as val")
-	// rows: [ {val: 1}, meta: ... ]
-
-  } finally {
-	if (conn) conn.release() //release to pool
+    const conn = await pool.getConnection();
+    const rows = await conn.query('SELECT * FROM Customers');
+    conn.release();
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-}
+});
 
-app.use(express.json())
+app.post('/customers', async (req, res) => {
+  const {
+    firstName,
+    surName,
+    email,
+    phoneNumber,
+    homeAddress,
+    homeCountry
+  } = req.body;
 
-const customerRouter = require('./Routes/customers.js')
-app.use('/customers', customerRouter)
+  if (!firstName || !surName || !email || !phoneNumber || !homeAddress || !homeCountry) {
+    return res.status(400).json({
+      error: 'All fields are required'
+    });
+  }
 
-app.listen(3000, () => console.log('Server started'))
+  try {
+    const conn = await pool.getConnection();
+    const result = await conn.query(
+      'INSERT INTO Customers (firstName, surName, email, phoneNumber, homeAddress, homeCountry) VALUES (?, ?, ?, ?, ?, ?)',
+      [firstName, surName, email, phoneNumber, homeAddress, homeCountry]
+    );
+    conn.release();
+
+    const insertId = Number(result.insertId);
+
+    res.json({
+      id: insertId,
+      firstName,
+      surName,
+      email,
+      phoneNumber,
+      homeAddress,
+      homeCountry
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: err.message
+    });
+  }
+});
+
+app.listen(port, () => {  // Start the server
+  console.log(`Server is listening on port ${port}`);
+});
