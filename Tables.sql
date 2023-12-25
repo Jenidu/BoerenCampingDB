@@ -41,7 +41,7 @@ CREATE TABLE CampingSpots (
     PRIMARY KEY (ID)
 );
 
-CREATE TABLE ActivitiesInfo (
+CREATE TABLE ActivityTypes (
     ID INT(11) unsigned AUTO_INCREMENT,  /* Auto assigns ID */
     activityName varchar(100) NOT NULL,
     discription MEDIUMTEXT,
@@ -53,11 +53,13 @@ CREATE TABLE ActivitiesInfo (
 );
 
 CREATE TABLE Activities (
-    activityID INT(11) unsigned NOT NULL,
+    ID INT(11) unsigned AUTO_INCREMENT,  /* Auto assigns ID */
+    activityTypeID INT(11) unsigned NOT NULL,
     totalAduls INT NOT NULL,
     totalChildren INT NOT NULL,
     startDate DATETIME NOT NULL,
-    endDate DATETIME NOT NULL
+    endDate DATETIME NOT NULL,
+    PRIMARY KEY (ID)
 );
 
 CREATE TABLE ActivitySignups (
@@ -70,11 +72,3 @@ CREATE TABLE ActivitySignups (
 CREATE USER IF NOT EXISTS 'admin'@'localhost' IDENTIFIED BY 'admin123';
 GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
-/*
-
-INSERT INTO ActivitiesInfo (activityName, discription, startTime, EndTime, maxPersons) VALUES ('', '', );
-DELETE 
-
-SELECT * FROM Customers;  Read
-UPDATE 
-*/

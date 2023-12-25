@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const customersRouter = require('./Routes/customers');
 const bookingsRouter = require('./Routes/bookings');
 const campingSpotsRouter = require('./Routes/campingspots');
-const activitiesInfoRouter = require('./Routes/activitiesinfo');
+const activityTypesRouter = require('./Routes/activitytypes');
 const activitiesRouter = require('./Routes/activities');
 const activitySignupsRouter = require('./Routes/activitysignups');
 require('dotenv').config();
@@ -16,7 +16,7 @@ app.use(bodyParser.json());  // Middleware to parse JSON requests
 app.use('/customers', customersRouter);
 app.use('/bookings', bookingsRouter);
 app.use('/campingSpots', campingSpotsRouter);
-app.use('/activitiesInfo', activitiesInfoRouter);
+app.use('/activityTypes', activityTypesRouter);
 app.use('/activities', activitiesRouter);
 app.use('/activitySignups', activitySignupsRouter);
 

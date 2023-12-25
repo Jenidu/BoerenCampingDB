@@ -11,8 +11,25 @@ router.get('/', async (req, res) => {
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
-  });
+});
 
+router.get('/:id', async (req, res) => {
+    try {
+        const spotId = req.params.id;
+        const conn = await pool.getConnection();
+        const rows = await conn.query('SELECT * FROM CampingSpots WHERE id = ?', [spotId]);
+        conn.release();
+
+        if (rows.length > 0) {
+            res.json(rows[0]);
+        } else {
+            res.status(404).json({ error: 'Spot not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+  
 router.post('/', async (req, res) => {
     const {
       spotName,
@@ -49,6 +66,6 @@ router.post('/', async (req, res) => {
         error: err.message
       });
     }
-  });
+});
 
 module.exports = router;

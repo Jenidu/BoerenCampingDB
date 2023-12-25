@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
-  });
+});
 
 router.post('/', async (req, res) => {
     const {
@@ -49,6 +49,6 @@ router.post('/', async (req, res) => {
         error: err.message
       });
     }
-  });
+});
 
 module.exports = router;

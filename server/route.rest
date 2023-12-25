@@ -2,6 +2,10 @@ GET http://localhost:3000/customers
 
 ###
 
+GET http://localhost:3000/customers/1
+
+###
+
 POST http://localhost:3000/customers
 Content-Type: application/json
 

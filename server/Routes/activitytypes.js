@@ -5,13 +5,30 @@ const pool = require('../pool');
 router.get('/', async (req, res) => {
     try {
       const conn = await pool.getConnection();
-      const rows = await conn.query('SELECT * FROM ActivitiesInfo');
+      const rows = await conn.query('SELECT * FROM ActivityTypes');
       conn.release();
       res.json(rows);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   });
+
+router.get('/:id', async (req, res) => {
+    try {
+        const activityTypeId = req.params.id;
+        const conn = await pool.getConnection();
+        const rows = await conn.query('SELECT * FROM ActivityTypes WHERE id = ?', [activityTypeId]);
+        conn.release();
+
+        if (rows.length > 0) {
+            res.json(rows[0]);
+        } else {
+            res.status(404).json({ error: 'Activity type not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 router.post('/', async (req, res) => {
     const {
@@ -28,11 +45,11 @@ router.post('/', async (req, res) => {
         error: 'All fields are required'
       });
     }
-  
+
     try {
       const conn = await pool.getConnection();
       const result = await conn.query(
-        'INSERT INTO ActivitiesInfo (activityName, discription, IMG_path, startTime, EndTime, maxPersons) VALUES (?, ?, ?, ?, ?, ?)',
+        'INSERT INTO ActivityTypes (activityName, discription, IMG_path, startTime, EndTime, maxPersons) VALUES (?, ?, ?, ?, ?, ?)',
         [activityName,
             discription,
             IMG_path,
