@@ -5,25 +5,22 @@ const pool = require('../pool');
 router.get('/', async (req, res) => {
     try {
       const conn = await pool.getConnection();
-      const rows = await conn.query('SELECT * FROM Customers');
+      const rows = await conn.query('SELECT * FROM CampingSpots');
       conn.release();
       res.json(rows);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   });
-  
+
 router.post('/', async (req, res) => {
     const {
-      firstName,
-      surName,
-      email,
-      phoneNumber,
-      homeAddress,
-      homeCountry
+      spotName,
+      spotSize,
+      pricePerDay
     } = req.body;
-  
-    if (!firstName || !surName || !email || !phoneNumber || !homeAddress || !homeCountry) {
+
+    if (!spotName || !spotSize || !pricePerDay) {
       return res.status(400).json({
         error: 'All fields are required'
       });
@@ -32,13 +29,10 @@ router.post('/', async (req, res) => {
     try {
       const conn = await pool.getConnection();
       const result = await conn.query(
-        'INSERT INTO Customers (firstName, surName, email, phoneNumber, homeAddress, homeCountry) VALUES (?, ?, ?, ?, ?, ?)',
-        [firstName,
-            surName,
-            email,
-            phoneNumber,
-            homeAddress,
-            homeCountry]
+        'INSERT INTO CampingSpots (spotName, spotSize, pricePerDay) VALUES (?, ?, ?)',
+        [spotName,
+            spotSize,
+            pricePerDay]
       );
       conn.release();
   
@@ -46,12 +40,9 @@ router.post('/', async (req, res) => {
   
       res.json({
         id: insertId,
-        firstName,
-        surName,
-        email,
-        phoneNumber,
-        homeAddress,
-        homeCountry
+        spotName,
+        spotSize,
+        pricePerDay
       });
     } catch (err) {
       res.status(500).json({

@@ -25,10 +25,10 @@ CREATE TABLE Bookings (
     startDate DATE NOT NULL,  /* Standard arriving time */
     endDate DATE NOT NULL,  /* Standard leaving time */
     adults INT NOT NULL,
-    children INT,
+    children INT NOT NULL,
     transactionPrice FLOAT NOT NULL,
     numberplate varchar(10),  /* NULL = no car (payment) */
-    electricCar BOOL,
+    electricCar BOOL NOT NULL,
     notes MEDIUMTEXT,
     PRIMARY KEY (ID)
 );
@@ -54,8 +54,8 @@ CREATE TABLE ActivitiesInfo (
 
 CREATE TABLE Activities (
     activityID INT(11) unsigned NOT NULL,
-    totalAduls INT,
-    totalChildren INT,
+    totalAduls INT NOT NULL,
+    totalChildren INT NOT NULL,
     startDate DATETIME NOT NULL,
     endDate DATETIME NOT NULL
 );
@@ -64,7 +64,7 @@ CREATE TABLE ActivitySignups (
     activityID INT(11) unsigned NOT NULL,
     customerID INT(11) unsigned NOT NULL,
     adults INT NOT NULL,  /* Adults per singup */
-    children INT  /* Children per singup */
+    children INT NOT NULL  /* Children per singup */
 );
 
 CREATE USER IF NOT EXISTS 'admin'@'localhost' IDENTIFIED BY 'admin123';
@@ -77,7 +77,4 @@ DELETE
 
 SELECT * FROM Customers;  Read
 UPDATE 
-
-
-Restful API
 */

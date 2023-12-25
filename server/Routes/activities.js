@@ -5,25 +5,24 @@ const pool = require('../pool');
 router.get('/', async (req, res) => {
     try {
       const conn = await pool.getConnection();
-      const rows = await conn.query('SELECT * FROM Customers');
+      const rows = await conn.query('SELECT * FROM Activities');
       conn.release();
       res.json(rows);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   });
-  
+
 router.post('/', async (req, res) => {
     const {
-      firstName,
-      surName,
-      email,
-      phoneNumber,
-      homeAddress,
-      homeCountry
+      activityID,
+      startDate,
+      endDate
     } = req.body;
-  
-    if (!firstName || !surName || !email || !phoneNumber || !homeAddress || !homeCountry) {
+    const totalAduls = 0  // When activity is first created there are no participants
+    const totalChildren = 0
+
+    if (!activityID || !startDate || !endDate) {
       return res.status(400).json({
         error: 'All fields are required'
       });
@@ -32,26 +31,21 @@ router.post('/', async (req, res) => {
     try {
       const conn = await pool.getConnection();
       const result = await conn.query(
-        'INSERT INTO Customers (firstName, surName, email, phoneNumber, homeAddress, homeCountry) VALUES (?, ?, ?, ?, ?, ?)',
-        [firstName,
-            surName,
-            email,
-            phoneNumber,
-            homeAddress,
-            homeCountry]
+        'INSERT INTO Activities (activityID, totalAduls, totalChildren, startDate, endDate) VALUES (?, ?, ?, ?, ?)',
+        [activityID,
+            totalAduls,
+            totalChildren,
+            startDate,
+            endDate]
       );
       conn.release();
   
-      const insertId = Number(result.insertId);
-  
       res.json({
-        id: insertId,
-        firstName,
-        surName,
-        email,
-        phoneNumber,
-        homeAddress,
-        homeCountry
+        activityID,
+            totalAduls,
+            totalChildren,
+            startDate,
+            endDate
       });
     } catch (err) {
       res.status(500).json({
