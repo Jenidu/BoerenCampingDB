@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../pool');
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res) => {  // Get all activity types
     try {
       const conn = await pool.getConnection();
       const rows = await conn.query('SELECT * FROM ActivityTypes');
@@ -11,9 +11,9 @@ router.get('/', async (req, res) => {
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
-  });
+});
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {  // Get 1 activity type
     try {
         const activityTypeId = req.params.id;
         const conn = await pool.getConnection();
@@ -30,7 +30,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res) => {  // Add 1 activity type
     const {
         activityName,
         discription,
@@ -75,6 +75,108 @@ router.post('/', async (req, res) => {
         error: err.message
       });
     }
-  });
+});
+
+router.patch('/:id', async (req, res) => {  // Update 1
+  const activityTypeId = req.params.id;
+
+  const {  // Extract fields from the request body that can be updated
+    activityName,
+    discription,
+    IMG_path,
+    startTime,
+    EndTime,
+    maxPersons
+  } = req.body;
+
+  if (!activityName && !discription && !IMG_path && !startTime && !EndTime && !maxPersons) {  // Extract fields from the request body that can be updated
+    return res.status(400).json({
+      error: 'At least one field is required for updating'
+    });
+  }
+
+  try {
+    const conn = await pool.getConnection();
+
+    const updateFields = [];  // Build the SQL UPDATE query based on the provided fields
+    const updateValues = [];
+
+    if (activityName) {
+      updateFields.push('activityName = ?');
+      updateValues.push(activityName);
+    }
+    if (discription) {
+      updateFields.push('discription = ?');
+      updateValues.push(discription);
+    }
+    if (IMG_path) {
+      updateFields.push('IMG_path = ?');
+      updateValues.push(IMG_path);
+    }
+    if (startTime) {
+      updateFields.push('startTime = ?');
+      updateValues.push(startTime);
+    }
+    if (EndTime) {
+      updateFields.push('EndTime = ?');
+      updateValues.push(EndTime);
+    }
+    if (maxPersons) {
+      updateFields.push('maxPersons = ?');
+      updateValues.push(maxPersons);
+    }
+
+    const updateQuery = `UPDATE ActivityTypes SET ${updateFields.join(', ')} WHERE id = ?`;
+
+    const result = await conn.query(
+      updateQuery,
+      [...updateValues, activityTypeId]
+    );
+
+    conn.release();
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        error: 'Activity type not found'
+      });
+    }
+
+    res.json({
+      message: 'Activity type updated successfully'
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: err.message
+    });
+  }
+});
+
+router.delete('/:id', async (req, res) => {  // Delete 1
+  const activityTypeId = req.params.id;
+
+  try {
+    const conn = await pool.getConnection();
+
+    const result = await conn.query(
+      'DELETE FROM ActivityTypes WHERE id = ?', [activityTypeId]
+    );
+
+    conn.release();
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        error: 'Activity type not found'
+      });
+    }
+
+    res.json({
+      message: 'Activity type deleted successfully'
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: err.message
+    });
+  }
+});
 
 module.exports = router;

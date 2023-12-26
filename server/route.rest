@@ -1,12 +1,12 @@
-GET http://localhost:3000/customers
+GET http://localhost:3042/customers
 
 ###
 
-GET http://localhost:3000/customers/1
+GET http://localhost:3042/customers/1
 
 ###
 
-POST http://localhost:3000/customers
+POST http://localhost:3042/customers
 Content-Type: application/json
 
 {
@@ -20,17 +20,16 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3000/customers/
+DELETE http://localhost:3042/customers/2
 
 ###
 
-PATCH  http://localhost:3000/customers/
+PATCH  http://localhost:3042/customers/2
+Content-Type: application/json
 
 {
     "firstName": "Pieter",
-    "surName": "Channel2",
-    "email": "hi@fefe.nl",
-    "phoneNumber": "49289035809",
-    "homeAddress": "hi2",
-    "homeCountry": "London"
+    "surName": "Channel3",
+    "email": "hi3@fefe.nl",
+    "homeAddress": "hi2"
 }

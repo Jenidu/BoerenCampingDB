@@ -63,10 +63,12 @@ CREATE TABLE Activities (
 );
 
 CREATE TABLE ActivitySignups (
+    ID INT(11) unsigned AUTO_INCREMENT,  /* Auto assigns ID */
     activityID INT(11) unsigned NOT NULL,
     customerID INT(11) unsigned NOT NULL,
     adults INT NOT NULL,  /* Adults per singup */
-    children INT NOT NULL  /* Children per singup */
+    children INT NOT NULL,  /* Children per singup */
+    PRIMARY KEY (ID)
 );
 
 CREATE USER IF NOT EXISTS 'admin'@'localhost' IDENTIFIED BY 'admin123';
