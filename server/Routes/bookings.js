@@ -44,7 +44,8 @@ router.post('/', async (req, res) => {  // Add 1 booking
       notes
     } = req.body;
   
-    if (!customerID || !spotID || !startDate || !endDate || !adults || !children || !transactionPrice) {
+    if (!customerID || !spotID || !startDate || !endDate ||
+    children === undefined || children === undefined || transactionPrice === undefined) {
       return res.status(400).json({
         error: 'All fields are required'
       });
@@ -105,7 +106,8 @@ router.patch('/:id', async (req, res) => {  // Update 1
     notes
   } = req.body;
 
-  if (!customerID && !spotID && !startDate && !endDate && !adults && !children && !transactionPrice && !numberplate && !electricCar && !notes) {
+  if (!customerID && !spotID && !startDate && !endDate && children === undefined && children === undefined
+    && transactionPrice === undefined && !numberplate && electricCar === undefined && !notes) {
     return res.status(400).json({
       error: 'At least one field is required for updating'
     });

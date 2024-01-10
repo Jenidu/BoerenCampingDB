@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {  // Add 1 activity type
         maxPersons
     } = req.body;
 
-    if (!activityName || !maxPersons) {
+    if (!activityName || maxPersons === undefined) {
       return res.status(400).json({
         error: 'All fields are required'
       });
@@ -89,7 +89,7 @@ router.patch('/:id', async (req, res) => {  // Update 1
     maxPersons
   } = req.body;
 
-  if (!activityName && !discription && !IMG_path && !startTime && !EndTime && !maxPersons) {  // Extract fields from the request body that can be updated
+  if (!activityName && !discription && !IMG_path && !startTime && !EndTime && maxPersons === undefined) {  // Extract fields from the request body that can be updated
     return res.status(400).json({
       error: 'At least one field is required for updating'
     });

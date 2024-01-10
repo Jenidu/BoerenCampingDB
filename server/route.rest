@@ -33,3 +33,39 @@ Content-Type: application/json
     "email": "hi3@fefe.nl",
     "homeAddress": "hi2"
 }
+
+###
+
+GET http://localhost:3042/bookings
+
+###
+
+GET http://localhost:3042/bookings/1
+
+###
+
+POST http://localhost:3042/bookings
+Content-Type: application/json
+
+{
+    "customerID": 3,
+    "spotID": 1,
+    "startDate": "2024-2-12",
+    "endDate": "2024-4-14",
+    "adults": 2,
+    "children": 0,
+    "transactionPrice": 5.223
+}
+
+###
+
+DELETE http://localhost:3042/bookings/3
+
+###
+
+PATCH  http://localhost:3042/bookings/2
+Content-Type: application/json
+
+{
+    "customerID": 4
+}

@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {  // Add 1 activity signup
       children
     } = req.body;
 
-    if (!activityID || !customerID || !adults || !children) {
+    if (!activityID || !customerID || adults === undefined || children === undefined) {
       return res.status(400).json({
         error: 'All fields are required'
       });
@@ -81,7 +81,7 @@ router.patch('/:id', async (req, res) => {  // Update 1
     children
   } = req.body;
 
-  if (!activityID && !customerID && !adults && !children) {  // Extract fields from the request body that can be updated
+  if (!activityID && !customerID && adults === undefined && children === undefined) {  // Extract fields from the request body that can be updated
     return res.status(400).json({
       error: 'At least one field is required for updating'
     });

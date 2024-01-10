@@ -28,7 +28,7 @@ CREATE TABLE Bookings (
     children INT NOT NULL,
     transactionPrice FLOAT NOT NULL,
     numberplate varchar(10),  /* NULL = no car (payment) */
-    electricCar BOOL NOT NULL,
+    electricCar BOOL,
     notes MEDIUMTEXT,
     PRIMARY KEY (ID)
 );
