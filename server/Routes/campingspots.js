@@ -33,11 +33,11 @@ router.get('/:id', async (req, res) => {  // Get 1 camping spot
 router.post('/', async (req, res) => {  // Add 1 camping spot
     const {
       spotName,
-      spotSize,
+      spotType,
       pricePerDay
     } = req.body;
 
-    if (!spotName || !spotSize || pricePerDay === undefined) {
+    if (!spotName || !spotType || pricePerDay === undefined) {
       return res.status(400).json({
         error: 'All fields are required'
       });
@@ -46,9 +46,9 @@ router.post('/', async (req, res) => {  // Add 1 camping spot
     try {
       const conn = await pool.getConnection();
       const result = await conn.query(
-        'INSERT INTO CampingSpots (spotName, spotSize, pricePerDay) VALUES (?, ?, ?)',
+        'INSERT INTO CampingSpots (spotName, spotType, pricePerDay) VALUES (?, ?, ?)',
         [spotName,
-            spotSize,
+          spotType,
             pricePerDay]
       );
       conn.release();
@@ -58,7 +58,7 @@ router.post('/', async (req, res) => {  // Add 1 camping spot
       res.json({
         id: insertId,
         spotName,
-        spotSize,
+        spotType,
         pricePerDay
       });
     } catch (err) {
@@ -73,11 +73,11 @@ router.patch('/:id', async (req, res) => {  // Update 1
 
   const {  // Extract fields from the request body that can be updated
     spotName,
-    spotSize,
+    spotType,
     pricePerDay
   } = req.body;
 
-  if (!spotName && !spotSize && pricePerDay === undefined) {  // Extract fields from the request body that can be updated
+  if (!spotName && !spotType && pricePerDay === undefined) {  // Extract fields from the request body that can be updated
     return res.status(400).json({
       error: 'At least one field is required for updating'
     });
@@ -93,9 +93,9 @@ router.patch('/:id', async (req, res) => {  // Update 1
       updateFields.push('spotName = ?');
       updateValues.push(spotName);
     }
-    if (spotSize) {
-      updateFields.push('spotSize = ?');
-      updateValues.push(spotSize);
+    if (spotType) {
+      updateFields.push('spotType = ?');
+      updateValues.push(spotType);
     }
     if (pricePerDay) {
       updateFields.push('pricePerDay = ?');

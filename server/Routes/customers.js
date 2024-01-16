@@ -33,14 +33,16 @@ router.get('/:id', async (req, res) => {  // Get 1 customer
 router.post('/', async (req, res) => {  // Add 1 customer
     const {
       firstName,
+      middleName,
       surName,
       email,
       phoneNumber,
       homeAddress,
-      homeCountry
+      homeCountry,
+      savedPassWord
     } = req.body;
   
-    if (!firstName || !surName || !email || !phoneNumber || !homeAddress || !homeCountry) {
+    if (!firstName || !surName || !email || !phoneNumber || !homeAddress || !homeCountry || !savedPassWord) {
       return res.status(400).json({
         error: 'All fields are required'
       });
@@ -49,13 +51,15 @@ router.post('/', async (req, res) => {  // Add 1 customer
     try {
       const conn = await pool.getConnection();
       const result = await conn.query(
-        'INSERT INTO Customers (firstName, surName, email, phoneNumber, homeAddress, homeCountry) VALUES (?, ?, ?, ?, ?, ?)',
+        'INSERT INTO Customers (firstName, middleName, surName, email, phoneNumber, homeAddress, homeCountry, savedPassWord) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         [firstName,
+            middleName,
             surName,
             email,
             phoneNumber,
             homeAddress,
-            homeCountry]
+            homeCountry,
+            savedPassWord]
       );
       conn.release();
   
@@ -64,11 +68,13 @@ router.post('/', async (req, res) => {  // Add 1 customer
       res.json({
         id: insertId,
         firstName,
+        middleName,
         surName,
         email,
         phoneNumber,
         homeAddress,
-        homeCountry
+        homeCountry,
+        savedPassWord
       });
     } catch (err) {
       res.status(500).json({
@@ -82,14 +88,16 @@ router.patch('/:id', async (req, res) => {  // Update 1
 
   const {  // Extract fields from the request body that can be updated
     firstName,
+    middleName,
     surName,
     email,
     phoneNumber,
     homeAddress,
-    homeCountry
+    homeCountry,
+    savedPassWord
   } = req.body;
 
-  if (!firstName && !surName && !email && !phoneNumber && !homeAddress && !homeCountry) {  // Extract fields from the request body that can be updated
+  if (!firstName && !middleName && !surName && !email && !phoneNumber && !homeAddress && !homeCountry && !savedPassWord) {  // Extract fields from the request body that can be updated
     return res.status(400).json({
       error: 'At least one field is required for updating'
     });
@@ -104,6 +112,10 @@ router.patch('/:id', async (req, res) => {  // Update 1
     if (firstName) {
       updateFields.push('firstName = ?');
       updateValues.push(firstName);
+    }
+    if (middleName) {
+      updateFields.push('middleName = ?');
+      updateValues.push(middleName);
     }
     if (surName) {
       updateFields.push('surName = ?');
@@ -124,6 +136,10 @@ router.patch('/:id', async (req, res) => {  // Update 1
     if (homeCountry) {
       updateFields.push('homeCountry = ?');
       updateValues.push(homeCountry);
+    }
+    if (savedPassWord) {
+      updateFields.push('savedPassWord = ?');
+      updateValues.push(savedPassWord);
     }
 
     const updateQuery = `UPDATE Customers SET ${updateFields.join(', ')} WHERE id = ?`;

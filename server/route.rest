@@ -24,7 +24,7 @@ DELETE http://localhost:3042/customers/2
 
 ###
 
-PATCH  http://localhost:3042/customers/2
+PATCH  http://localhost:3042/customers/3
 Content-Type: application/json
 
 {
@@ -68,4 +68,36 @@ Content-Type: application/json
 
 {
     "customerID": 4
+}
+
+###
+
+GET http://localhost:3042/campingspots
+
+###
+
+GET http://localhost:3042/campingspots/1
+
+###
+
+POST http://localhost:3042/campingspots
+Content-Type: application/json
+
+{
+    "spotName": "Jemoeder",
+    "spotSize": "Small",
+    "pricePerDay": 2.5
+}
+
+###
+
+DELETE http://localhost:3042/campingspots/3
+
+###
+
+PATCH  http://localhost:3042/campingspots/2
+Content-Type: application/json
+
+{
+    "spotSize": "Big"
 }

@@ -38,6 +38,8 @@ router.post('/', async (req, res) => {  // Add 1 booking
       endDate,
       adults,
       children,
+      babies,
+      pets,
       transactionPrice,
       numberplate,
       electricCar,
@@ -45,7 +47,7 @@ router.post('/', async (req, res) => {  // Add 1 booking
     } = req.body;
   
     if (!customerID || !spotID || !startDate || !endDate ||
-    children === undefined || children === undefined || transactionPrice === undefined) {
+      adults === undefined || children === undefined || babies === undefined || pets === undefined || transactionPrice === undefined) {
       return res.status(400).json({
         error: 'All fields are required'
       });
@@ -54,17 +56,19 @@ router.post('/', async (req, res) => {  // Add 1 booking
     try {
       const conn = await pool.getConnection();
       const result = await conn.query(
-        'INSERT INTO Bookings (customerID, spotID, startDate, endDate, adults, children, transactionPrice, numberplate, electricCar, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO Bookings (customerID, spotID, startDate, endDate, adults, children, babies, pets, transactionPrice, numberplate, electricCar, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [customerID,
-            spotID,
-            startDate,
-            endDate,
-            adults,
-            children,
-            transactionPrice,
-            numberplate,
-            electricCar,
-            notes]
+          spotID,
+          startDate,
+          endDate,
+          adults,
+          children,
+          babies,
+          pets,
+          transactionPrice,
+          numberplate,
+          electricCar,
+          notes]
       );
       conn.release();
   
@@ -78,6 +82,8 @@ router.post('/', async (req, res) => {  // Add 1 booking
         endDate,
         adults,
         children,
+        babies,
+        pets,
         transactionPrice,
         numberplate,
         electricCar,
@@ -100,14 +106,16 @@ router.patch('/:id', async (req, res) => {  // Update 1
     endDate,
     adults,
     children,
+    babies,
+    pets,
     transactionPrice,
     numberplate,
     electricCar,
     notes
   } = req.body;
 
-  if (!customerID && !spotID && !startDate && !endDate && children === undefined && children === undefined
-    && transactionPrice === undefined && !numberplate && electricCar === undefined && !notes) {
+  if (!customerID && !spotID && !startDate && !endDate && adults === undefined && children === undefined && babies === undefined && pets === undefined &&
+    transactionPrice === undefined && !numberplate && electricCar === undefined && !notes) {
     return res.status(400).json({
       error: 'At least one field is required for updating'
     });
@@ -142,6 +150,14 @@ router.patch('/:id', async (req, res) => {  // Update 1
     if (children) {
       updateFields.push('children = ?');
       updateValues.push(children);
+    }
+    if (babies) {
+      updateFields.push('babies = ?');
+      updateValues.push(babies);
+    }
+    if (pets) {
+      updateFields.push('pets = ?');
+      updateValues.push(pets);
     }
     if (transactionPrice) {
       updateFields.push('transactionPrice = ?');
