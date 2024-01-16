@@ -33,6 +33,7 @@ router.get('/:id', async (req, res) => {  // Get 1 activity type
 router.post('/', async (req, res) => {  // Add 1 activity type
     const {
         activityName,
+        short_discription,
         discription,
         IMG_path,
         startTime,
@@ -49,8 +50,9 @@ router.post('/', async (req, res) => {  // Add 1 activity type
     try {
       const conn = await pool.getConnection();
       const result = await conn.query(
-        'INSERT INTO ActivityTypes (activityName, discription, IMG_path, startTime, EndTime, maxPersons) VALUES (?, ?, ?, ?, ?, ?)',
+        'INSERT INTO ActivityTypes (activityName, short_discription, discription, IMG_path, startTime, EndTime, maxPersons) VALUES (?, ?, ?, ?, ?, ?, ?)',
         [activityName,
+            short_discription,
             discription,
             IMG_path,
             startTime,
@@ -64,6 +66,7 @@ router.post('/', async (req, res) => {  // Add 1 activity type
       res.json({
         id: insertId,
         activityName,
+        short_discription,
         discription,
         IMG_path,
         startTime,
@@ -82,6 +85,7 @@ router.patch('/:id', async (req, res) => {  // Update 1
 
   const {  // Extract fields from the request body that can be updated
     activityName,
+    short_discription,
     discription,
     IMG_path,
     startTime,
@@ -89,7 +93,7 @@ router.patch('/:id', async (req, res) => {  // Update 1
     maxPersons
   } = req.body;
 
-  if (!activityName && !discription && !IMG_path && !startTime && !EndTime && maxPersons === undefined) {  // Extract fields from the request body that can be updated
+  if (!activityName && !short_discription && !discription && !IMG_path && !startTime && !EndTime && maxPersons === undefined) {  // Extract fields from the request body that can be updated
     return res.status(400).json({
       error: 'At least one field is required for updating'
     });
@@ -104,6 +108,10 @@ router.patch('/:id', async (req, res) => {  // Update 1
     if (activityName) {
       updateFields.push('activityName = ?');
       updateValues.push(activityName);
+    }
+    if (short_discription) {
+      updateFields.push('short_discription = ?');
+      updateValues.push(short_discription);
     }
     if (discription) {
       updateFields.push('discription = ?');

@@ -15,7 +15,8 @@ Content-Type: application/json
     "email": "hi@fefe.nl",
     "phoneNumber": "49289035809",
     "homeAddress": "hi",
-    "homeCountry": "London"
+    "homeCountry": "London",
+    "savedPassWord": "good_password"
 }
 
 ###
@@ -54,6 +55,8 @@ Content-Type: application/json
     "endDate": "2024-4-14",
     "adults": 2,
     "children": 0,
+    "babies": 0,
+    "pets": 0,
     "transactionPrice": 5.223
 }
 
@@ -84,8 +87,8 @@ POST http://localhost:3042/campingspots
 Content-Type: application/json
 
 {
-    "spotName": "Jemoeder",
-    "spotSize": "Small",
+    "spotName": "G1",
+    "spotType": "Glamping",
     "pricePerDay": 2.5
 }
 

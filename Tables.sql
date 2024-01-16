@@ -48,6 +48,7 @@ CREATE TABLE CampingSpots (
 CREATE TABLE ActivityTypes (
     ID INT(11) unsigned AUTO_INCREMENT,  /* Auto assigns ID */
     activityName varchar(100) NOT NULL,
+    short_discription MEDIUMTEXT,
     discription MEDIUMTEXT,
     IMG_path varchar(100),
     startTime TIME,  /* Starting time of the day */
