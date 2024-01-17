@@ -3,20 +3,16 @@ const router = express.Router();
 const pool = require('../pool');
 const bcrypt = require('bcrypt');
 
-router.get('/', async (req, res) => {  // Get all users
-	try {
-		const conn = await pool.getConnection();
-		const rows = await conn.query('SELECT * FROM AdminUsers');
-		conn.release();
-		res.json(rows);
-	} catch (err) {
-		res.status(500).json({ error: err.message });
+router.get('/', async (req, res) => {  // Check if password is right
+	const [userName, userPassword] = req.body;
+	if (!userName || !userPassword) {
+		return res.status(400).json({
+			error: 'All fields are required'
+		});
 	}
-});
 
-router.get('/:id', async (req, res) => {  // Check if password is right
 	try {
-
+		
 	} catch (err) {
 		res.status(500).json({ error: err.message });
 	}
@@ -24,12 +20,12 @@ router.get('/:id', async (req, res) => {  // Check if password is right
 
 router.post('/', async (req, res) => {  // Add 1 user
 	const {
-		username,
-		password,
-		email
+		userName,
+		userPassword,
+		userEmail
 	} = req.body;
 
-	if (!username || !password || !email) {
+	if (!userName || !userPassword || !userEmail) {
 		return res.status(400).json({
 			error: 'All fields are required'
 		});
@@ -37,7 +33,7 @@ router.post('/', async (req, res) => {  // Add 1 user
 
 	try {
 		const conn = await pool.getConnection();
-		const results = await conn.query('SELECT (username, userEmail) FROM AdminUsers');
+		const results = await conn.query('SELECT (userName, userEmail) FROM AdminUsers');
 		conn.release();
 
 		for (let result of results) {
@@ -55,35 +51,40 @@ router.post('/', async (req, res) => {  // Add 1 user
 	}
 	const saltRounds = 10;
 
-	bcrypt.genSalt(saltRounds, function (err, salt) {
-		bcrypt.hash(password, salt, async function (err, hash) {
-			if (err) {
-				return res.status(500).json({
-					error: err.message
-				});
-			}
-
-			const userType = 'nothing'
+	bcrypt
+		.genSalt(saltRounds)
+		.then(userSalt => {
+			return bcrypt.hash(userPassword, userSalt)
+		})
+		.then(async hash => {
+			// split the hash into the salt and the hash parts
+			const userSalt = hash.slice(7, 29);
+			const userHashedPassword = hash.slice(29);
 
 			try {
 				const conn = await pool.getConnection();
 				const result = await conn.query(
-					'INSERT INTO AdminUsers (userName, UserHash, userEmail, userType) VALUES (?, ?, ?)',
-					[username, hash, email, userType]
+					'INSERT INTO AdminUsers (userName, userHashedPassword, userEmail, userType, userSalt) VALUES (?, ?, ?, ?, ?)',
+					[userName, userHashedPassword, userEmail, userType, userSalt]
 				);
 				conn.release();
-
-				res.json({
-					success: true,
-					message: 'User added successfully'
-				});
 			} catch (err) {
 				res.status(500).json({
 					error: err.message
 				});
 			}
-		});		
-	});
+		})
+		.then(result=>{
+			res.status(200).json({
+				message: 'User added successfully'
+			});
+		})
+		.catch(err => {
+			console.error(err.message)
+			res.status(500).json({
+				error: err.message
+			});	
+		});
 });
 
 module.exports = router;

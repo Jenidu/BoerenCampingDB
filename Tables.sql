@@ -80,8 +80,9 @@ CREATE TABLE AdminUsers (
 	ID INT(11) unsigned AUTO_INCREMENT, /* Auto assigns ID */
 	userName varchar(100) NOT NULL,
 	userEmail varchar(100) NOT NULL,
-	userHash INT NOT NULL,
+	userHashedPassword varchar(100) NOT NULL,
 	userType ENUM('admin', 'user', 'watcher', 'nothing') NOT NULL, /* Type column */
+	userSalt INT NOT NULL,
 	PRIMARY KEY (ID)
 );
 
