@@ -6,6 +6,7 @@ const campingSpotsRouter = require('./Routes/campingspots');
 const activityTypesRouter = require('./Routes/activitytypes');
 const activitiesRouter = require('./Routes/activities');
 const activitySignupsRouter = require('./Routes/activitysignups');
+const adminLogin = require('./Routes/adminlogin');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -25,6 +26,7 @@ app.use('/campingSpots', campingSpotsRouter);
 app.use('/activityTypes', activityTypesRouter);
 app.use('/activities', activitiesRouter);
 app.use('/activitySignups', activitySignupsRouter);
+app.use('/adminlogin', adminLogin);
 
 app.listen(port, () => {  // Start the server
   console.log(`Server is listening on port ${port}`);

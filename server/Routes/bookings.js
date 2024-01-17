@@ -13,17 +13,27 @@ router.get('/', async (req, res) => {  // Get all bookings
     }
 });
 
-router.get('/:id', async (req, res) => {  // Get 1 booking
+router.get('/search', async (req, res)  => {  // Search bookings
   try {
-      const bookingId = req.params.id;
-      const conn = await pool.getConnection();
-      const rows = await conn.query('SELECT * FROM Bookings WHERE id = ?', [bookingId]);
-      conn.release();
+      const queryParams = req.query;
 
-      if (rows.length > 0) {
-          res.json(rows[0]);
+      if (Object.keys(queryParams).length > 0) {  // If query parameters are present, construct a dynamic query
+          const conn = await pool.getConnection();
+          const keys = Object.keys(queryParams);
+          const values = Object.values(queryParams);
+
+          const query = `SELECT * FROM Bookings WHERE ${keys.map(key => `${key} = ?`).join(' AND ')}`;
+          const rows = await conn.query(query, values);
+
+          conn.release();
+
+          if (rows.length > 0) {
+              res.json(rows);
+          } else {
+              res.status(404).json({ error: 'No matching bookings found' });
+          }
       } else {
-          res.status(404).json({ error: 'Booking not found' });
+          res.status(400).json({ error: 'Invalid request. Provide query parameters.' });
       }
   } catch (err) {
       res.status(500).json({ error: err.message });

@@ -46,10 +46,11 @@ router.post('/', async (req, res) => {  // Add 1 user
 	const {
 		userName,
 		userPassword,
-		userEmail
+		userEmail,
+		userType
 	} = req.body;
 
-	if (!userName || !userPassword || !userEmail) {
+	if (!userName || !userPassword || !userEmail || !userType) {
 		return res.status(400).json({
 			error: 'All fields are required'
 		});
@@ -57,16 +58,19 @@ router.post('/', async (req, res) => {  // Add 1 user
 
 	try {
 		const conn = await pool.getConnection();
-		const results = await conn.query('SELECT (userName, userEmail) FROM AdminUsers');
+		const found_user = await conn.query(`SELECT * FROM AdminUsers WHERE userName = ?`, [userName]);
+		const found_email = await conn.query(`SELECT * FROM AdminUsers WHERE userEmail = ?`, [userEmail]);
 		conn.release();
 
-		for (let result of results) {
-			if (result.userName === userName || result.userEmail === userEmail) {
-				return res.status(400).json({
-					error: 'Username or email already exists'
-				});
-			}
-
+		if (found_user.length > 0) {
+			return res.status(400).json({
+				error: 'Username already exists'
+			});
+		}
+		else if (found_email.length > 0) {
+			return res.status(400).json({
+				error: 'Email already exists'
+			});
 		}
 	} catch (err) {
 		return res.status(500).json({

@@ -21,6 +21,14 @@ Content-Type: application/json
 
 ###
 
+GET http://localhost:3042/customers/search?firstName=Piet&surName=Channel
+
+###
+
+GET http://localhost:3042/customers/search?surName=Channel
+
+###
+
 DELETE http://localhost:3042/customers/2
 
 ###
@@ -37,6 +45,10 @@ Content-Type: application/json
 
 ###
 
+GET http://localhost:3042/customers/firstName=pieter
+
+###
+
 GET http://localhost:3042/bookings
 
 ###
@@ -48,16 +60,30 @@ GET http://localhost:3042/bookings/1
 POST http://localhost:3042/bookings
 Content-Type: application/json
 
+# {
+#     "customerID": 3,
+#     "spotID": 1,
+#     "startDate": "2024-2-12",
+#     "endDate": "2024-4-14",
+#     "adults": 2,
+#     "children": 0,
+#     "babies": 0,
+#     "pets": 0,
+#     "transactionPrice": 5.223
+# }
+
 {
-    "customerID": 3,
-    "spotID": 1,
-    "startDate": "2024-2-12",
-    "endDate": "2024-4-14",
-    "adults": 2,
-    "children": 0,
-    "babies": 0,
-    "pets": 0,
-    "transactionPrice": 5.223
+   "adults": 1,
+"babies": 0,
+"children": 2,
+"customerID": 4,
+"electricCar" : false,
+"endDate" :  "2024-01-20T14:04:24.380Z",
+"numberplate": "las-2-a-a",
+"pets": 0,
+"spotID" : 25,
+"startDate": "2024-01-16T14:04:24.380Z",
+"transactionPrice" : 39.5
 }
 
 ###
@@ -102,5 +128,38 @@ PATCH  http://localhost:3042/campingspots/2
 Content-Type: application/json
 
 {
-    "spotSize": "Big"
+    "spotType": "Staplaats"
+}
+
+###
+
+GET http://localhost:3042/adminlogin
+
+###
+
+GET http://localhost:3042/adminlogin/1
+
+###
+
+POST http://localhost:3042/adminlogin
+Content-Type: application/json
+
+{
+    "userName": "Notch",
+    "userEmail": "google@google.nl",
+    "userPassword": "12",
+    "userType" : "admin"
+}
+
+###
+
+DELETE http://localhost:3042/adminlogin/3
+
+###
+
+PATCH  http://localhost:3042/adminlogin/2
+Content-Type: application/json
+
+{
+    "spotType": "Staplaats"
 }
