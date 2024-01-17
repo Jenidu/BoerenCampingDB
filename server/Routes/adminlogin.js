@@ -12,7 +12,31 @@ router.get('/', async (req, res) => {  // Check if password is right
 	}
 
 	try {
-		
+		const conn = await pool.getConnection();
+		const result = await conn.query('SELECT (userSalt, userHashedPassword, userType) FROM AdminUsers WHERE userName = ?', [userName]);
+		conn.release();
+
+		if (result.length === 0) {
+			return res.status(404).json({
+				error: 'Username does not exist'
+			});
+		}
+		const userSalt = result[0].userSalt;
+		const userHashedPassword = result[0].userHashedPassword;
+		const userType = result[0].userType;
+
+		const fullHash = '$2b$10$' + userSalt + userHashedPassword;
+
+		if (bcrypt.compare(userPassword, fullHash)) {
+			res.status(200).json({
+				message: 'Password is correct',
+				userType: userType
+			});
+		} else {
+			res.status(401).json({
+				error: 'Password is incorrect'
+			});
+		}
 	} catch (err) {
 		res.status(500).json({ error: err.message });
 	}
@@ -37,7 +61,7 @@ router.post('/', async (req, res) => {  // Add 1 user
 		conn.release();
 
 		for (let result of results) {
-			if (result.username === username || result.userEmail === email) {
+			if (result.userName === userName || result.userEmail === userEmail) {
 				return res.status(400).json({
 					error: 'Username or email already exists'
 				});
