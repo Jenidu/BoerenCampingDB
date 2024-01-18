@@ -46,15 +46,16 @@ router.post('/', async (req, res) => {  // Add 1 user
 	const {
 		userName,
 		userPassword,
-		userEmail,
-		userType
+		userEmail
 	} = req.body;
 
-	if (!userName || !userPassword || !userEmail || !userType) {
+	if (!userName || !userPassword || !userEmail) {
 		return res.status(400).json({
 			error: 'All fields are required'
 		});
 	}
+
+	const userType = 'notDefined';
 
 	try {
 		const conn = await pool.getConnection();
@@ -67,7 +68,7 @@ router.post('/', async (req, res) => {  // Add 1 user
 				error: 'Username already exists'
 			});
 		}
-		else if (found_email.length > 0) {
+		if (found_email.length > 0) {
 			return res.status(400).json({
 				error: 'Email already exists'
 			});
@@ -108,7 +109,6 @@ router.post('/', async (req, res) => {  // Add 1 user
 			});
 		})
 		.catch(err => {
-			console.error(err.message)
 			res.status(500).json({
 				error: err.message
 			});	
