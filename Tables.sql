@@ -1,5 +1,5 @@
-SET
-	SQL_MODE = ORACLE;
+
+SET SQL_MODE=ORACLE;
 
 CREATE DATABASE BookingSystem; /* Create database */
 

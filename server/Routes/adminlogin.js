@@ -4,7 +4,8 @@ const pool = require('../pool');
 const bcrypt = require('bcrypt');
 
 router.get('/', async (req, res) => {  // Check if password is right
-	const [userName, userPassword] = req.body;
+	const {userName, userPassword} = req.body;
+
 	if (!userName || !userPassword) {
 		return res.status(400).json({
 			error: 'All fields are required'
@@ -13,7 +14,7 @@ router.get('/', async (req, res) => {  // Check if password is right
 
 	try {
 		const conn = await pool.getConnection();
-		const result = await conn.query('SELECT (userSalt, userHashedPassword, userType) FROM AdminUsers WHERE userName = ?', [userName]);
+		const result = await conn.query('SELECT * FROM AdminUsers WHERE userName = ?', [userName]);
 		conn.release();
 
 		if (result.length === 0) {
