@@ -137,13 +137,9 @@ GET http://localhost:3042/adminlogin
 Content-Type: application/json
 
 {
-    "userName": "Notch2",
+    "userName": "Notch",
     "userPassword": "12"
 }
-
-###
-
-GET http://localhost:3042/adminlogin/1
 
 ###
 
@@ -151,8 +147,8 @@ POST http://localhost:3042/adminlogin
 Content-Type: application/json
 
 {
-    "userName": "Notch2",
-    "userEmail": "notch2@google.nl",
+    "userName": "Notch",
+    "userEmail": "notch@google.nl",
     "userPassword": "12"
 }
 

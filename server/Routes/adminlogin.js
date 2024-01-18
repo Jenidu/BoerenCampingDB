@@ -4,7 +4,9 @@ const pool = require('../pool');
 const bcrypt = require('bcrypt');
 
 router.get('/', async (req, res) => {  // Check if password is right
-	const {userName, userPassword} = req.body;
+	const {userName,
+		userPassword
+	} = req.body;
 
 	if (!userName || !userPassword) {
 		return res.status(400).json({
@@ -27,7 +29,6 @@ router.get('/', async (req, res) => {  // Check if password is right
 		bcrypt 
 			.compare(userPassword, userHashedPassword)
 			.then(result => {
-				console.log(result);
 				if (result) {
 					res.status(200).json({
 						message: 'Password is correct',
