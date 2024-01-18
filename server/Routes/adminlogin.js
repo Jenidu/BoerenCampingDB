@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {  // Check if password is right
 
 		const fullHash = '$2b$10$' + userSalt + userHashedPassword;
 
-		if (bcrypt.compare(userPassword, fullHash)) {
+		if (bcrypt.compare(userPassword, userHashedPassword)) {
 			res.status(200).json({
 				message: 'Password is correct',
 				userType: userType
@@ -82,15 +82,10 @@ router.post('/', async (req, res) => {  // Add 1 user
 	const saltRounds = 10;
 
 	bcrypt
-		.genSalt(saltRounds)
-		.then(userSalt => {
-			return bcrypt.hash(userPassword, userSalt)
-		})
+		.hash(userPassword, saltRounds)
 		.then(async hash => {
-			// split the hash into the salt and the hash parts
-			const userSalt = hash.slice(7, 29);
-			const userHashedPassword = hash.slice(29);
-
+			const userHashedPassword = hash
+			const userSalt = "x"
 			try {
 				const conn = await pool.getConnection();
 				const result = await conn.query(
@@ -106,7 +101,8 @@ router.post('/', async (req, res) => {  // Add 1 user
 		})
 		.then(result=>{
 			res.status(200).json({
-				message: 'User added successfully'
+				message: 'User added successfully',
+				userType: userType
 			});
 		})
 		.catch(err => {
