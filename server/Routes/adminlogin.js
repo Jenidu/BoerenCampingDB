@@ -24,17 +24,23 @@ router.get('/', async (req, res) => {  // Check if password is right
 		}
 		const userHashedPassword = result[0].userHashedPassword;
 		const userType = result[0].userType;
-
-		if (bcrypt.compare(userPassword, userHashedPassword)) {
-			res.status(200).json({
-				message: 'Password is correct',
-				userType: userType
-			});
-		} else {
-			res.status(401).json({
-				error: 'Password is incorrect'
-			});
-		}
+		bcrypt 
+			.compare(userPassword, userHashedPassword)
+			.then(result => {
+				console.log(result);
+				if (result) {
+					res.status(200).json({
+						message: 'Password is correct',
+						userType: userType
+					});
+				} else {
+					res.status(401).json({
+						error: 'Password is incorrect'
+					});
+				}
+			})
+			.catch(err => {console.log(err)});
+		
 	} catch (err) {
 		res.status(500).json({ error: err.message });
 	}
@@ -85,7 +91,7 @@ router.post('/', async (req, res) => {  // Add 1 user
 			try {
 				const conn = await pool.getConnection();
 				const result = await conn.query(
-					'INSERT INTO AdminUsers (userName, userHashedPassword, userEmail, userType) VALUES (?, ?, ?, ?, ?)',
+					'INSERT INTO AdminUsers (userName, userHashedPassword, userEmail, userType) VALUES (?, ?, ?, ?)',
 					[userName, userHashedPassword, userEmail, userType]
 				);
 				conn.release();
