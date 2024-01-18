@@ -22,11 +22,8 @@ router.get('/', async (req, res) => {  // Check if password is right
 				error: 'Username does not exist'
 			});
 		}
-		const userSalt = result[0].userSalt;
 		const userHashedPassword = result[0].userHashedPassword;
 		const userType = result[0].userType;
-
-		const fullHash = '$2b$10$' + userSalt + userHashedPassword;
 
 		if (bcrypt.compare(userPassword, userHashedPassword)) {
 			res.status(200).json({
@@ -85,12 +82,11 @@ router.post('/', async (req, res) => {  // Add 1 user
 		.hash(userPassword, saltRounds)
 		.then(async hash => {
 			const userHashedPassword = hash
-			const userSalt = "x"
 			try {
 				const conn = await pool.getConnection();
 				const result = await conn.query(
-					'INSERT INTO AdminUsers (userName, userHashedPassword, userEmail, userType, userSalt) VALUES (?, ?, ?, ?, ?)',
-					[userName, userHashedPassword, userEmail, userType, userSalt]
+					'INSERT INTO AdminUsers (userName, userHashedPassword, userEmail, userType) VALUES (?, ?, ?, ?, ?)',
+					[userName, userHashedPassword, userEmail, userType]
 				);
 				conn.release();
 			} catch (err) {

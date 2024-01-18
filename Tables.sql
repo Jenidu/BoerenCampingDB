@@ -82,7 +82,6 @@ CREATE TABLE AdminUsers (
 	userEmail varchar(100) NOT NULL,
 	userHashedPassword varchar(100) NOT NULL,
 	userType ENUM('admin', 'user', 'watcher', 'notDefined') NOT NULL, /* Another type is 'nothing' but only used on the front end. */
-	userSalt varchar(100) NOT NULL,
 	PRIMARY KEY (ID)
 );
 
