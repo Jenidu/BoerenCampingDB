@@ -15,7 +15,7 @@ const port = process.env.PORT;
 
 app.use(bodyParser.json());  // Middleware to parse JSON requests
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: ['172.30.30.30:3000', '170.30.10.51'],  // Open front-end and admin-portal to CORS.
   methods: 'GET,POST,DELETE,PATCH',
   credentials: true,
 }));
