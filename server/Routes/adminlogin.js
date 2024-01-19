@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {  // Check if password is right
 	}
 });
 
-router.post('/', async (req, res) => {  // Add 1 user
+router.post('/signup', async (req, res) => {  // Add 1 user
 	const {
 		userName,
 		userPassword,
