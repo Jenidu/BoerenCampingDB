@@ -7,11 +7,14 @@ const activityTypesRouter = require('./Routes/activitytypes');
 const activitiesRouter = require('./Routes/activities');
 const activitySignupsRouter = require('./Routes/activitysignups');
 const adminLogin = require('./Routes/adminlogin');
+const http = require('http');
 const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT;
+
+const server = http.createServer(app);
 
 app.use(bodyParser.json());  // Middleware to parse JSON requests
 app.use(cors({
@@ -28,6 +31,6 @@ app.use('/activities', activitiesRouter);
 app.use('/activitySignups', activitySignupsRouter);
 app.use('/adminlogin', adminLogin);
 
-app.listen(port, () => {  // Start the server
+server.listen(port, () => {  // Start the server
   console.log(`Server is listening on port ${port}`);
 });
