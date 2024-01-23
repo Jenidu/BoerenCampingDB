@@ -55,7 +55,7 @@ router.post('/', async (req, res) => {  // Add 1 booking
       electricCar,
       notes
     } = req.body;
- console.log(req.body) 
+
     if (!customerID || !spotID || !startDate || !endDate ||
       adults === undefined || children === undefined || babies === undefined || pets === undefined || transactionPrice === undefined) {
       return res.status(400).json({

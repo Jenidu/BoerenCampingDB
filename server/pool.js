@@ -9,7 +9,7 @@ try {
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT) || 5});
+      connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT)});
   }
   catch (err) {
     console.error("Error creating mariaDB pool:", err)
