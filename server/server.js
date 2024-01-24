@@ -17,11 +17,11 @@ const port = process.env.PORT;
 const server = http.createServer(app);
 
 app.use(bodyParser.json());  // Middleware to parse JSON requests
-app.use(cors({
+app.use(cors());
   // origin: ['http://172.30.30.30', 'http://170.30.10.51'],  // Open front-end and admin-portal to CORS.
-  methods: 'GET,POST,DELETE,PATCH',
+  // methods: 'GET,POST,DELETE,PATCH',
   //credentials: true,
-}));
+// }));
 
 app.use('/customers', customersRouter);
 app.use('/bookings', bookingsRouter);
