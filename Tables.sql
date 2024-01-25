@@ -51,8 +51,8 @@ CREATE TABLE ActivityTypes (
 	short_discription MEDIUMTEXT,
 	discription MEDIUMTEXT,
 	IMG_path varchar(100),
-	startTime TIME, /* Starting time of the day */
-	EndTime TIME, /* Ending time of the day*/
+	startTime DATETIME TIME, /* Starting time of the day */
+	EndTime DATETIME TIME, /* Ending time of the day*/
 	maxPersons INT NOT NULL,
 	PRIMARY KEY (ID)
 );
