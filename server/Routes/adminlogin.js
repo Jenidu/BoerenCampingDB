@@ -4,7 +4,7 @@ const pool = require('../pool');
 const bcrypt = require('bcrypt');
 
 router.post('/login', async (req, res) => {  // Check if password is right
-	const {userName,
+	const { userName,
 		userPassword
 	} = req.body;
 
@@ -26,22 +26,36 @@ router.post('/login', async (req, res) => {  // Check if password is right
 		}
 		const userHashedPassword = result[0].userHashedPassword;
 		const userType = result[0].userType;
-		bcrypt 
-			.compare(userPassword, userHashedPassword)
-			.then(result => {
-				if (result) {
-					res.status(200).json({
-						message: 'Password is correct',
-						userType: userType
-					});
-				} else {
-					res.status(401).json({
-						error: 'Password is incorrect'
-					});
-				}
-			})
-			.catch(err => {console.log(err)});
-		
+
+
+		if (userPassword === userHashedPassword) {
+			res.status(200).json({
+				message: 'Password is correct',
+				userType: userType
+			});
+		} else {
+			res.status(401).json({
+				error: 'Password is incorrect'
+			});
+		}
+
+
+		// bcrypt 
+		// 	.compare(userPassword, userHashedPassword)
+		// 	.then(result => {
+		// 		if (result) {
+		// 			res.status(200).json({
+		// 				message: 'Password is correct',
+		// 				userType: userType
+		// 			});
+		// 		} else {
+		// 			res.status(401).json({
+		// 				error: 'Password is incorrect'
+		// 			});
+		// 		}
+		// 	})
+		// 	.catch(err => {console.log(err)});
+
 	} catch (err) {
 		res.status(500).json({ error: err.message });
 	}
@@ -102,7 +116,7 @@ router.post('/signup', async (req, res) => {  // Add 1 user
 				});
 			}
 		})
-		.then(result=>{
+		.then(result => {
 			res.status(200).json({
 				message: 'User added successfully',
 				userType: userType
@@ -111,7 +125,7 @@ router.post('/signup', async (req, res) => {  // Add 1 user
 		.catch(err => {
 			res.status(500).json({
 				error: err.message
-			});	
+			});
 		});
 });
 
